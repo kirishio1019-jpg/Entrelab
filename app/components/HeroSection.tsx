@@ -104,20 +104,22 @@ export default function HeroSection({ user, onPostClick, onLogout }: HeroSection
     <section className="relative h-screen w-full overflow-hidden bg-[#070612]">
       {/* Logo/Brand - Top Left */}
       <div className="absolute top-6 left-6 lg:top-8 lg:left-12 z-30 flex items-center gap-6">
-        <div className="text-2xl font-bold text-white tracking-tight">Entrelab</div>
+        <Link href="/">
+          <h1 className="text-2xl font-bold text-white tracking-tight">Entrelab</h1>
+        </Link>
         <div className="hidden md:flex items-center gap-6 text-sm font-medium">
-          <a href="/concept" className="text-white/70 hover:text-white transition-colors">
-            コンセプト
-          </a>
-          <a href="/wallbatting" className="text-white/70 hover:text-white transition-colors">
-            壁打ちツール
-          </a>
-          <a href="/blog" className="text-white/70 hover:text-white transition-colors">
-            起業ノウハウ
-          </a>
-          <a href="/about" className="text-white/70 hover:text-white transition-colors">
+          <Link href="/about" className="text-white/70 hover:text-white transition-colors">
             Entrelabについて
-          </a>
+          </Link>
+          <Link href="/concept" className="text-white/70 hover:text-white transition-colors">
+            コンセプト
+          </Link>
+          <Link href="/blog" className="text-white/70 hover:text-white transition-colors">
+            起業ノウハウ
+          </Link>
+          <Link href="/wallbatting" className="text-white/70 hover:text-white transition-colors">
+            壁打ちツール
+          </Link>
         </div>
       </div>
         
