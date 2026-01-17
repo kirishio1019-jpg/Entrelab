@@ -11,6 +11,7 @@ import { createClient } from '@/lib/supabase/client'
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [user, setUser] = useState<any>(null)
+  const [modalInitialData, setModalInitialData] = useState({ title: '', description: '' })
   const supabase = createClient()
 
   useEffect(() => {
@@ -50,11 +51,39 @@ export default function Home() {
     setUser(null)
   }
 
+  const jsonLdData = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Entrelab',
+    url: process.env.NEXT_PUBLIC_SITE_URL || 'https://entrelab.vercel.app',
+    description: 'ラフな起業アイデアを共有し、フィードバックを集め、共同創業者を見つけよう。',
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://entrelab.vercel.app'}/search?q={search_term_string}`
+      },
+      'query-input': 'required name=search_term_string'
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Entrelab',
+      logo: {
+        '@type': 'ImageObject',
+        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://entrelab.vercel.app'}/logo.png`
+      }
+    }
+  }
+
   return (
     <main className="w-full bg-black text-[#F5F5F7] overflow-x-hidden font-serif">
-      <JsonLd />
+      <JsonLd data={jsonLdData} />
       <InAppBrowserGuide />
-      <PostIdeaModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <PostIdeaModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        initialData={modalInitialData}
+      />
       
       <HeroSection 
         user={user} 
