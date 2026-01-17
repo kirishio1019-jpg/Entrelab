@@ -109,7 +109,10 @@ export default function HeroSection({ user, onPostClick, onLogout }: HeroSection
           <a href="/concept" className="text-white/70 hover:text-white transition-colors">
             コンセプト
           </a>
-          <a href="/articles" className="text-white/70 hover:text-white transition-colors">
+          <a href="/wallbatting" className="text-white/70 hover:text-white transition-colors">
+            壁打ちツール
+          </a>
+          <a href="/blog" className="text-white/70 hover:text-white transition-colors">
             起業ノウハウ
           </a>
           <a href="/about" className="text-white/70 hover:text-white transition-colors">

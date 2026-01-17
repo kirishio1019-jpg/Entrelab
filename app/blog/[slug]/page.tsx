@@ -1,17 +1,20 @@
-import { getAllArticles, getArticleBySlug } from '@/lib/articles'
+import { getArticleBySlug, getArticles } from '@/lib/articles'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Calendar, Tag } from 'lucide-react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import JsonLd from '@/app/components/JsonLd'
+import rehypeSlug from 'rehype-slug'
+import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 
 type Props = {
-  params: Promise<{ slug: string }>
+  params: { slug: string }
 }
 
 // Generate static params for all articles
 export async function generateStaticParams() {
-  const articles = getAllArticles()
+  const articles = getArticles()
   return articles.map((article) => ({
     slug: article.slug,
   }))
@@ -19,8 +22,7 @@ export async function generateStaticParams() {
 
 // Generate metadata for SEO
 export async function generateMetadata({ params }: Props) {
-  const { slug } = await params
-  const article = getArticleBySlug(slug)
+  const article = getArticleBySlug(params.slug)
 
   if (!article) {
     return {
@@ -36,7 +38,7 @@ export async function generateMetadata({ params }: Props) {
       description: article.description,
       type: 'article',
       publishedTime: article.date,
-      url: `/articles/${slug}`,
+      url: `/blog/${params.slug}`,
     },
     twitter: {
       card: 'summary_large_image',
@@ -46,23 +48,44 @@ export async function generateMetadata({ params }: Props) {
   }
 }
 
-export default async function ArticlePage({ params }: Props) {
-  const { slug } = await params
-  const article = getArticleBySlug(slug)
+export default function ArticlePage({ params }: Props) {
+  const article = getArticleBySlug(params.slug)
 
   if (!article) {
     notFound()
   }
 
+  const jsonLdData = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": article.title,
+    "description": article.description,
+    "datePublished": article.date,
+    "author": {
+      "@type": "Organization",
+      "name": "Entrelab",
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Entrelab",
+      "logo": {
+        "@type": "ImageObject",
+        "url": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://entrelab.vercel.app'}/favicon.ico`,
+      },
+    },
+    "url": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://entrelab.vercel.app'}/blog/${article.slug}`,
+  }
+
   return (
-    <div className="min-h-screen bg-black text-[#F5F5F7] font-serif">
+    <div className="min-h-screen bg-[#070612] text-[#F5F5F7] font-serif">
+      <JsonLd data={jsonLdData} />
       <div className="max-w-3xl mx-auto px-6 py-12">
         <Link 
-          href="/articles"
+          href="/blog"
           className="inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors mb-8"
         >
           <ArrowLeft className="w-4 h-4" />
-          記事一覧に戻る
+          ブログ一覧に戻る
         </Link>
 
         <article>
@@ -74,8 +97,9 @@ export default async function ArticlePage({ params }: Props) {
             <div className="flex flex-wrap items-center gap-4 text-sm text-white/50 border-b border-white/10 pb-6">
               <div className="flex items-center gap-1.5">
                 <Calendar className="w-4 h-4" />
-                <time dateTime={article.date}>{article.date}</time>
+                <time dateTime={article.date}>{new Date(article.date).toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
               </div>
+              {/* 
               {article.tags && (
                 <div className="flex items-center gap-2">
                   <Tag className="w-4 h-4" />
@@ -87,18 +111,20 @@ export default async function ArticlePage({ params }: Props) {
                     ))}
                   </div>
                 </div>
-              )}
+              )} 
+              */}
             </div>
           </header>
 
           <div className="prose prose-invert prose-lg md:prose-xl max-w-none prose-headings:text-white prose-headings:font-bold prose-headings:leading-tight prose-a:text-blue-400 hover:prose-a:text-blue-300 prose-p:text-white/80 prose-p:leading-loose prose-li:text-white/80 prose-strong:text-white prose-strong:font-bold">
             <ReactMarkdown 
               remarkPlugins={[remarkGfm]}
+              rehypePlugins={[rehypeSlug, [rehypeAutolinkHeadings, { behavior: 'wrap' }]]}
               components={{
                 h2: ({node, ...props}) => <h2 className="text-2xl md:text-3xl font-bold mt-16 mb-8 pb-4 border-b border-white/10" {...props} />,
                 h3: ({node, ...props}) => <h3 className="text-xl md:text-2xl font-bold mt-12 mb-6" {...props} />,
                 p: ({node, ...props}) => <p className="mb-8" {...props} />,
-                ul: ({node, ...props}) => <ul className="my-8 space-y-4" {...props} />,
+                ul: ({node, ...props}) => <ul className="my-8 space-y-4 list-disc pl-6" {...props} />,
                 li: ({node, ...props}) => <li className="pl-2" {...props} />,
               }}
             >
