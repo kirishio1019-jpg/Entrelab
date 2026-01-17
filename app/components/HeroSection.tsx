@@ -104,8 +104,11 @@ export default function HeroSection({ user, onPostClick, onLogout }: HeroSection
     <section className="relative h-screen w-full overflow-hidden bg-[#070612]">
       {/* Logo/Brand - Top Left */}
       <div className="absolute top-6 left-6 lg:top-8 lg:left-12 z-30 flex items-center gap-6">
-        <h1 className="text-2xl font-bold text-white tracking-tight">Entrelab</h1>
+        <div className="text-2xl font-bold text-white tracking-tight">Entrelab</div>
         <div className="hidden md:flex items-center gap-6 text-sm font-medium">
+          <a href="/concept" className="text-white/70 hover:text-white transition-colors">
+            コンセプト
+          </a>
           <a href="/articles" className="text-white/70 hover:text-white transition-colors">
             起業ノウハウ
           </a>
@@ -158,32 +161,23 @@ export default function HeroSection({ user, onPostClick, onLogout }: HeroSection
               
               {/* Badge */}
               <BlurIn duration={0.6}>
-                <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 backdrop-blur-sm px-3 py-1.5">
+                <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 backdrop-blur-sm px-3 py-1.5 mb-4">
                   <Sparkles className="h-3 w-3 text-white/80" />
                   <span className="text-sm font-medium text-white/80">Co-Create Your Future</span>
                 </div>
               </BlurIn>
 
-              {/* Main Heading */}
-              <div className="flex flex-col text-4xl font-medium leading-tight text-white md:text-5xl lg:text-6xl lg:leading-[1.2]">
-                <SplitText text="未完成のアイデアを" delay={0} className="block" />
-                <div className="flex flex-wrap items-baseline">
-                  <SplitText text="世界に" delay={0.4} />
-                  <motion.span
-                    initial={{ opacity: 0, y: 40 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.6, duration: 0.6 }}
-                    className="font-serif italic"
-                  >
-                    解き放て。
-                  </motion.span>
-                </div>
-              </div>
+              {/* Main Heading (SEO Optimized) */}
+              <h1 className="text-4xl font-medium leading-tight text-white md:text-5xl lg:text-6xl lg:leading-[1.2]">
+                <span className="block font-bold">起業アイデアを言語化し、</span>
+                <span className="block font-bold">磨くためのプラットフォーム</span>
+              </h1>
 
-              {/* Subtitle */}
-              <BlurIn delay={0.4} duration={0.6} className="max-w-xl">
-                <p className="text-lg font-normal leading-relaxed text-white/80">
-                  ラフな起業アイデアを投稿し、フィードバックを集め、共に作り上げる仲間を見つけよう。完璧である必要はありません。必要なのは情熱だけ。
+              {/* Subtitle (SEO Description) */}
+              <BlurIn delay={0.4} duration={0.6} className="max-w-2xl">
+                <p className="text-lg font-normal leading-relaxed text-white/80 mb-6">
+                  Entrelabは、学生・若手起業家向けに、アイデアの壁打ちや構想整理を行うための創出・検証プラットフォームです。
+                  未完成のアイデアを投稿し、フィードバックを集め、仲間と共に事業を形にしていきましょう。
                 </p>
               </BlurIn>
             </div>
