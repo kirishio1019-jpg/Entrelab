@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     telephone: false,
   },
   verification: {
-    google: "google205b429e3d2e6b0b",
+    google: "WKcz8JRn70AwMSXU7dSGnzcwx20fME7V2jklZoa2Ais",
   },
   openGraph: {
     title: "起業アイデアを気軽に投げて磨ける | Entrelab",
