@@ -23,7 +23,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     'student-startup-guide',
     'startup-idea-framework',
     'mvp-development',
-    // Add subsequent articles here
+    'find-cofounder',
+    'startup-failure-reasons',
+    'pitch-deck-guide',
+    'student-funding',
+    'lean-startup-basics',
+    'no-code-startup',
+    'business-model-canvas',
   ]
 
   const articleUrls = articleSlugs.map((slug) => ({

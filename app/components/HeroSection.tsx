@@ -103,8 +103,11 @@ export default function HeroSection({ user, onPostClick, onLogout }: HeroSection
   return (
     <section className="relative h-screen w-full overflow-hidden bg-[#070612]">
       {/* Logo/Brand - Top Left */}
-      <div className="absolute top-6 left-6 lg:top-8 lg:left-12 z-30">
+      <div className="absolute top-6 left-6 lg:top-8 lg:left-12 z-30 flex items-center gap-6">
         <h1 className="text-2xl font-bold text-white tracking-tight">Entrelab</h1>
+        <a href="/articles" className="hidden md:block text-sm text-white/70 hover:text-white transition-colors font-medium">
+          起業ノウハウ
+        </a>
       </div>
         
       {/* Logout / User Status - Top Right */}
