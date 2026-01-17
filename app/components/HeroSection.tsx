@@ -1,8 +1,8 @@
 'use client'
 
-import React from 'react'
-import { motion, Variants } from 'framer-motion'
-import { ArrowRight, Sparkles, LogOut, User } from 'lucide-react'
+import React, { useState } from 'react'
+import { motion, Variants, AnimatePresence } from 'framer-motion'
+import { ArrowRight, Sparkles, LogOut, User, Menu, X } from 'lucide-react'
 import VideoBackground from './VideoBackground'
 import Link from 'next/link'
 
@@ -94,6 +94,8 @@ interface HeroSectionProps {
 }
 
 export default function HeroSection({ user, onPostClick, onLogout }: HeroSectionProps) {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+
   const handleExplore = () => {
     const feedSection = document.getElementById('feed')
     if (feedSection) {
@@ -102,7 +104,7 @@ export default function HeroSection({ user, onPostClick, onLogout }: HeroSection
   }
 
   return (
-    <section className="relative h-screen w-full overflow-hidden bg-[#070612]">
+    <section className="relative h-screen min-h-[600px] w-full overflow-hidden bg-[#070612]">
       {/* Logo/Brand - Top Left */}
       <div className="absolute top-6 left-6 lg:top-8 lg:left-12 z-30 flex items-center gap-6">
         <Link href="/">
@@ -123,11 +125,78 @@ export default function HeroSection({ user, onPostClick, onLogout }: HeroSection
           </Link>
         </div>
       </div>
+
+      {/* Mobile Menu Button */}
+      <button 
+        onClick={() => setIsMobileMenuOpen(true)}
+        className="absolute top-6 right-6 z-30 md:hidden p-2 text-white/80 hover:text-white"
+      >
+        <Menu className="w-6 h-6" />
+      </button>
+
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, x: '100%' }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: '100%' }}
+            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            className="fixed inset-0 z-50 bg-[#070612] p-6 flex flex-col md:hidden"
+          >
+            <div className="flex justify-between items-center mb-8">
+              <h2 className="text-2xl font-bold text-white">Menu</h2>
+              <button 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="p-2 text-white/80 hover:text-white"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            
+            <nav className="flex flex-col gap-6 text-lg font-medium">
+              <Link href="/about" className="text-white/80 hover:text-white" onClick={() => setIsMobileMenuOpen(false)}>
+                Entrelabについて
+              </Link>
+              <Link href="/concept" className="text-white/80 hover:text-white" onClick={() => setIsMobileMenuOpen(false)}>
+                コンセプト
+              </Link>
+              <Link href="/blog" className="text-white/80 hover:text-white" onClick={() => setIsMobileMenuOpen(false)}>
+                起業ノウハウ
+              </Link>
+              <Link href="/wallbatting" className="text-white/80 hover:text-white" onClick={() => setIsMobileMenuOpen(false)}>
+                壁打ちツール
+              </Link>
+            </nav>
+
+            {user && (
+              <div className="mt-auto pt-8 border-t border-white/10">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
+                    <User className="w-5 h-5 text-white" />
+                  </div>
+                  <span className="text-white/80 truncate">{user.email}</span>
+                </div>
+                <button
+                  onClick={() => {
+                    onLogout()
+                    setIsMobileMenuOpen(false)
+                  }}
+                  className="w-full flex items-center justify-center gap-2 bg-white/10 p-3 rounded-lg text-white font-medium hover:bg-white/20"
+                >
+                  <LogOut className="w-4 h-4" />
+                  ログアウト
+                </button>
+              </div>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
         
-      {/* Logout / User Status - Top Right */}
+      {/* Logout / User Status - Top Right (Desktop) */}
       {user && (
-        <div className="absolute top-6 right-6 lg:top-8 lg:right-12 z-30 flex items-center gap-3 animate-in fade-in duration-500">
-          <div className="hidden md:flex items-center gap-2 text-white/80 text-sm bg-white/10 px-3 py-1.5 rounded-full border border-white/10 backdrop-blur-md">
+        <div className="hidden md:flex absolute top-6 right-6 lg:top-8 lg:right-12 z-30 items-center gap-3 animate-in fade-in duration-500">
+          <div className="flex items-center gap-2 text-white/80 text-sm bg-white/10 px-3 py-1.5 rounded-full border border-white/10 backdrop-blur-md">
             <User className="w-3.5 h-3.5" />
             <span className="max-w-[100px] truncate">{user.email}</span>
           </div>
@@ -159,16 +228,16 @@ export default function HeroSection({ user, onPostClick, onLogout }: HeroSection
 
       {/* Content Container */}
       <div className="relative z-20 flex h-full items-center">
-        <div className="max-w-7xl px-6 lg:px-12 w-full pt-20 lg:pt-0"> {/* Added padding top for mobile */}
+        <div className="max-w-7xl px-6 lg:px-12 w-full pt-32 lg:pt-0"> {/* Increased padding top for mobile */}
           <div className="flex flex-col items-start gap-12">
             
             {/* Top Content Group */}
             <div className="flex flex-col items-start gap-6 max-w-4xl">
               
               {/* Main Heading (SEO Optimized) */}
-              <h1 className="text-4xl font-medium leading-tight text-white md:text-5xl lg:text-6xl lg:leading-[1.2]">
-                <span className="block font-bold">起業アイデアを言語化し、</span>
-                <span className="block font-bold">磨くためのプラットフォーム</span>
+              <h1 className="text-3xl font-medium leading-tight text-white md:text-5xl lg:text-6xl lg:leading-[1.2]">
+                <span className="block font-bold lg:inline">起業アイデアを言語化し、</span>
+                <span className="block font-bold lg:inline">磨くためのプラットフォーム</span>
               </h1>
 
               {/* Subtitle (SEO Description) */}

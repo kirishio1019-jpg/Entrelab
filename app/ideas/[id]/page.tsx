@@ -1,65 +1,86 @@
-import { Metadata } from 'next'
+'use client'
+
+import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
-import { ArrowLeft, MessageSquare, ThumbsUp, Calendar, User, Tag, Briefcase } from 'lucide-react'
-import { notFound } from 'next/navigation'
+import { ArrowLeft, MessageSquare, ThumbsUp, Calendar, User, Briefcase, Trash2 } from 'lucide-react'
+import { notFound, useRouter } from 'next/navigation'
 
 // Force dynamic rendering for this page
 export const dynamic = 'force-dynamic'
 
 type Props = {
-  params: Promise<{ id: string }>
+  params: { id: string }
 }
 
-async function getIdea(id: string) {
+export default function IdeaPage({ params }: Props) {
+  const [idea, setIdea] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
+  const [currentUser, setCurrentUser] = useState<any>(null)
+  const router = useRouter()
   const supabase = createClient()
-  const { data: idea, error } = await supabase
-    .from('ideas')
-    .select(`
-      *,
-      likes (count),
-      comments (count)
-    `)
-    .eq('id', id)
-    .single()
 
-  if (error || !idea) return null
-  return idea
-}
+  useEffect(() => {
+    const fetchData = async () => {
+      // Get current user
+      const { data: { user } } = await supabase.auth.getUser()
+      setCurrentUser(user)
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { id } = await params
-  const idea = await getIdea(id)
+      // Get idea
+      const { data: ideaData, error } = await supabase
+        .from('ideas')
+        .select(`
+          *,
+          likes (count),
+          comments (count)
+        `)
+        .eq('id', params.id)
+        .single()
 
-  if (!idea) {
-    return {
-      title: 'Idea Not Found | Entrelab',
+      if (error || !ideaData) {
+        setLoading(false)
+        return
+      }
+
+      setIdea(ideaData)
+      setLoading(false)
+    }
+
+    fetchData()
+  }, [params.id])
+
+  const handleDelete = async () => {
+    if (!window.confirm('本当に削除しますか？この操作は取り消せません。')) return
+
+    const { error } = await supabase
+      .from('ideas')
+      .delete()
+      .eq('id', params.id)
+
+    if (error) {
+      alert('削除に失敗しました。')
+      console.error(error)
+    } else {
+      router.push('/')
+      router.refresh()
     }
   }
 
-  return {
-    title: `${idea.title} | Entrelab`,
-    description: idea.description.slice(0, 120) + '...',
-    openGraph: {
-      title: `${idea.title} | Entrelab`,
-      description: idea.description.slice(0, 120) + '...',
-      type: 'article',
-      url: `/ideas/${id}`,
-    },
-    twitter: {
-      card: 'summary',
-      title: `${idea.title} | Entrelab`,
-      description: idea.description.slice(0, 120) + '...',
-    },
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center text-white/50">
+        Loading...
+      </div>
+    )
   }
-}
-
-export default async function IdeaPage({ params }: Props) {
-  const { id } = await params
-  const idea = await getIdea(id)
 
   if (!idea) {
-    notFound()
+    return (
+      <div className="min-h-screen bg-black flex flex-col items-center justify-center text-white/50 gap-4">
+        <p>アイデアが見つかりません</p>
+        <Link href="/" className="text-blue-400 hover:underline">トップに戻る</Link>
+      </div>
+    )
   }
 
   return (
@@ -75,10 +96,22 @@ export default async function IdeaPage({ params }: Props) {
         </Link>
 
         {/* Content */}
-        <article className="bg-white/5 rounded-2xl border border-white/10 overflow-hidden">
+        <article className="bg-white/5 rounded-2xl border border-white/10 overflow-hidden relative">
+          
+          {/* Delete Button (Owner Only) */}
+          {currentUser && currentUser.id === idea.user_id && (
+            <button
+              onClick={handleDelete}
+              className="absolute top-6 right-6 p-2 rounded-full bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors z-10"
+              title="削除する"
+            >
+              <Trash2 className="w-5 h-5" />
+            </button>
+          )}
+
           <div className="p-8 md:p-12">
             {/* Header */}
-            <div className="flex flex-wrap gap-3 mb-6">
+            <div className="flex flex-wrap gap-3 mb-6 pr-12"> {/* Added padding-right to avoid overlap with delete button */}
               {idea.tags?.map((tag: string) => (
                 <span 
                   key={tag}
