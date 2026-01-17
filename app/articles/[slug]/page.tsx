@@ -91,8 +91,17 @@ export default async function ArticlePage({ params }: Props) {
             </div>
           </header>
 
-          <div className="prose prose-invert prose-lg max-w-none prose-headings:text-white prose-a:text-blue-400 hover:prose-a:text-blue-300">
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+          <div className="prose prose-invert prose-lg md:prose-xl max-w-none prose-headings:text-white prose-headings:font-bold prose-headings:leading-tight prose-a:text-blue-400 hover:prose-a:text-blue-300 prose-p:text-white/80 prose-p:leading-loose prose-li:text-white/80 prose-strong:text-white prose-strong:font-bold">
+            <ReactMarkdown 
+              remarkPlugins={[remarkGfm]}
+              components={{
+                h2: ({node, ...props}) => <h2 className="text-2xl md:text-3xl font-bold mt-16 mb-8 pb-4 border-b border-white/10" {...props} />,
+                h3: ({node, ...props}) => <h3 className="text-xl md:text-2xl font-bold mt-12 mb-6" {...props} />,
+                p: ({node, ...props}) => <p className="mb-8" {...props} />,
+                ul: ({node, ...props}) => <ul className="my-8 space-y-4" {...props} />,
+                li: ({node, ...props}) => <li className="pl-2" {...props} />,
+              }}
+            >
               {article.content}
             </ReactMarkdown>
           </div>
