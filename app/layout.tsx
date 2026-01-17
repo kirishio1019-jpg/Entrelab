@@ -10,7 +10,7 @@ const notoSerifJP = Noto_Serif_JP({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://entrelab.vercel.app"),
   title: {
-    default: "起業アイデアを気軽に投げて磨ける | Entrelab",
+    default: "Entrelab | 起業アイデアを気軽に投げて磨けるプラットフォーム",
     template: "%s | Entrelab",
   },
   description: "Entrelabは、ラフな起業アイデアを投稿し、他者からフィードバックをもらいながら一緒に育てていける実験型プラットフォームです。",
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     google: "WKcz8JRn70AwMSXU7dSGnzcwx20fME7V2jklZoa2Ais",
   },
   openGraph: {
-    title: "起業アイデアを気軽に投げて磨ける | Entrelab",
+    title: "Entrelab | 起業アイデアを気軽に投げて磨けるプラットフォーム",
     description: "Entrelabは、ラフな起業アイデアを投稿し、他者からフィードバックをもらいながら一緒に育てていける実験型プラットフォームです。",
     url: "/",
     siteName: "Entrelab",
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "起業アイデアを気軽に投げて磨ける | Entrelab",
+    title: "Entrelab | 起業アイデアを気軽に投げて磨けるプラットフォーム",
     description: "Entrelabは、ラフな起業アイデアを投稿し、他者からフィードバックをもらいながら一緒に育てていける実験型プラットフォームです。",
     images: ["/og-image.png"],
     // creator: "@your_twitter_handle", // Optional: Add if you have one
