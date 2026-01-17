@@ -10,10 +10,10 @@ const notoSerifJP = Noto_Serif_JP({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://entrelab.vercel.app"),
   title: {
-    default: "Entrelab - 未来を共創する場所",
+    default: "起業アイデアを気軽に投げて磨ける | Entrelab",
     template: "%s | Entrelab",
   },
-  description: "ラフな起業アイデアを共有し、フィードバックを集め、共同創業者を見つけよう。完璧である必要はありません。必要なのは情熱だけ。",
+  description: "Entrelabは、ラフな起業アイデアを投稿し、他者からフィードバックをもらいながら一緒に育てていける実験型プラットフォームです。",
   keywords: ["起業", "アイデア", "スタートアップ", "共同創業者", "メンター", "フィードバック", "Entrelab", "アントレラボ"],
   authors: [{ name: "Entrelab Team" }],
   creator: "Entrelab Team",
@@ -23,9 +23,12 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
+  verification: {
+    google: "google-site-verification-code-here", // Replace with actual code from Search Console later
+  },
   openGraph: {
-    title: "Entrelab - 未来を共創する場所",
-    description: "ラフな起業アイデアを共有し、フィードバックを集め、共同創業者を見つけよう。完璧である必要はありません。必要なのは情熱だけ。",
+    title: "起業アイデアを気軽に投げて磨ける | Entrelab",
+    description: "Entrelabは、ラフな起業アイデアを投稿し、他者からフィードバックをもらいながら一緒に育てていける実験型プラットフォームです。",
     url: "/",
     siteName: "Entrelab",
     locale: "ja_JP",
@@ -41,8 +44,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Entrelab - 未来を共創する場所",
-    description: "ラフな起業アイデアを共有し、フィードバックを集め、共同創業者を見つけよう。",
+    title: "起業アイデアを気軽に投げて磨ける | Entrelab",
+    description: "Entrelabは、ラフな起業アイデアを投稿し、他者からフィードバックをもらいながら一緒に育てていける実験型プラットフォームです。",
     images: ["/og-image.png"],
     // creator: "@your_twitter_handle", // Optional: Add if you have one
   },
