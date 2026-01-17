@@ -21,11 +21,6 @@ create policy "Authenticated users can insert ideas"
   on ideas for insert
   with check ( auth.uid() = user_id );
 
--- Optional: Policy for updating/deleting own ideas
-create policy "Users can update own ideas"
-  on ideas for update
-  using ( auth.uid() = user_id );
-
 create policy "Users can delete own ideas"
   on ideas for delete
   using ( auth.uid() = user_id );
