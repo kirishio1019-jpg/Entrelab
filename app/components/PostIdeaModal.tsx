@@ -9,9 +9,13 @@ interface PostIdeaModalProps {
   isOpen: boolean
   onClose: () => void
   onPostSuccess?: () => void
+  initialData?: {
+    title?: string
+    description?: string
+  }
 }
 
-export default function PostIdeaModal({ isOpen, onClose, onPostSuccess }: PostIdeaModalProps) {
+export default function PostIdeaModal({ isOpen, onClose, onPostSuccess, initialData }: PostIdeaModalProps) {
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     title: '',
@@ -20,6 +24,17 @@ export default function PostIdeaModal({ isOpen, onClose, onPostSuccess }: PostId
     tags: '',
     authorName: ''
   })
+
+  // Update formData when initialData changes or modal opens
+  React.useEffect(() => {
+    if (isOpen && initialData) {
+      setFormData(prev => ({
+        ...prev,
+        title: initialData.title || prev.title,
+        description: initialData.description || prev.description
+      }))
+    }
+  }, [isOpen, initialData])
 
   const supabase = createClient()
 

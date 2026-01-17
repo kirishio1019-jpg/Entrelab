@@ -4,6 +4,8 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { ArrowLeft, RefreshCcw, Save } from 'lucide-react'
+import PostIdeaModal from '@/app/components/PostIdeaModal'
+import { createClient } from '@/lib/supabase/client'
 
 export default function SliderTool() {
   const [values, setValues] = useState({
@@ -14,6 +16,9 @@ export default function SliderTool() {
   })
 
   const [showResult, setShowResult] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [modalInitialData, setModalInitialData] = useState({ title: '', description: '' })
+  const supabase = createClient()
 
   const handleChange = (key: keyof typeof values, value: number) => {
     setValues(prev => ({ ...prev, [key]: value }))
@@ -28,8 +33,44 @@ export default function SliderTool() {
     return "まだ荒削りですね。でも大丈夫、ここからがスタートです。"
   }
 
+  const handleSave = async () => {
+    const { data: { user } } = await supabase.auth.getUser()
+    
+    if (!user) {
+       await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/wallbatting/slider`,
+        },
+      })
+      return
+    }
+
+    const description = `
+【アイデア現在地チェック結果】
+・情熱: ${values.passion}%
+・市場性: ${values.market}%
+・実現性: ${values.feasibility}%
+・独自性: ${values.uniqueness}%
+
+【判定】
+${getFeedback()}
+    `.trim()
+
+    setModalInitialData({
+      title: 'スライダー評価からのアイデア投稿',
+      description: description
+    })
+    setIsModalOpen(true)
+  }
+
   return (
     <div className="min-h-screen bg-[#070612] text-[#F5F5F7] font-serif">
+      <PostIdeaModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        initialData={modalInitialData}
+      />
       <div className="max-w-2xl mx-auto px-6 py-12">
         <Link 
           href="/wallbatting"
@@ -120,7 +161,7 @@ export default function SliderTool() {
             
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <button 
-                onClick={() => alert('ログイン画面へ遷移（実装予定）')}
+                onClick={handleSave}
                 className="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-full bg-white text-[#070612] font-bold hover:bg-white/90 transition-all"
               >
                 <Save className="w-4 h-4" />

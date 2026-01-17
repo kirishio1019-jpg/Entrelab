@@ -4,6 +4,8 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowLeft, ArrowRight, Check, Save } from 'lucide-react'
+import PostIdeaModal from '@/app/components/PostIdeaModal'
+import { createClient } from '@/lib/supabase/client'
 
 export default function StepTool() {
   const [step, setStep] = useState(0)
@@ -13,6 +15,10 @@ export default function StepTool() {
     solution: '',
     why_now: ''
   })
+
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [modalInitialData, setModalInitialData] = useState({ title: '', description: '' })
+  const supabase = createClient()
 
   const questions = [
     {
@@ -60,8 +66,48 @@ export default function StepTool() {
     setAnswers(prev => ({ ...prev, [currentQ.key]: val }))
   }
 
+  const handleSave = async () => {
+    const { data: { user } } = await supabase.auth.getUser()
+    
+    if (!user) {
+       await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/wallbatting/step`,
+        },
+      })
+      return
+    }
+
+    const description = `
+【ステップ壁打ち結果】
+■ 誰の課題？
+${answers.who}
+
+■ どんな痛み？
+${answers.problem}
+
+■ 解決策
+${answers.solution}
+
+■ なぜ今？
+${answers.why_now}
+    `.trim()
+
+    setModalInitialData({
+      title: 'ステップ壁打ちからのアイデア投稿',
+      description: description
+    })
+    setIsModalOpen(true)
+  }
+
   return (
     <div className="min-h-screen bg-[#070612] text-[#F5F5F7] font-serif">
+      <PostIdeaModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        initialData={modalInitialData}
+      />
       <div className="max-w-2xl mx-auto px-6 py-12">
         <Link 
           href="/wallbatting"
@@ -153,7 +199,7 @@ export default function StepTool() {
               </div>
 
               <button 
-                onClick={() => alert('ログイン画面へ遷移（実装予定）')}
+                onClick={handleSave}
                 className="inline-flex items-center justify-center gap-2 px-10 py-4 rounded-full bg-white text-[#070612] font-bold hover:bg-white/90 transition-all hover:scale-105 shadow-lg shadow-white/10"
               >
                 <Save className="w-5 h-5" />
