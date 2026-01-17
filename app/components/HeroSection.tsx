@@ -162,14 +162,6 @@ export default function HeroSection({ user, onPostClick, onLogout }: HeroSection
             {/* Top Content Group */}
             <div className="flex flex-col items-start gap-6 max-w-4xl">
               
-              {/* Badge */}
-              <BlurIn duration={0.6}>
-                <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 backdrop-blur-sm px-3 py-1.5 mb-4">
-                  <Sparkles className="h-3 w-3 text-white/80" />
-                  <span className="text-sm font-medium text-white/80">Co-Create Your Future</span>
-                </div>
-              </BlurIn>
-
               {/* Main Heading (SEO Optimized) */}
               <h1 className="text-4xl font-medium leading-tight text-white md:text-5xl lg:text-6xl lg:leading-[1.2]">
                 <span className="block font-bold">起業アイデアを言語化し、</span>
