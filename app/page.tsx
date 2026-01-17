@@ -31,6 +31,12 @@ export default function Home() {
       await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
+          // Use a fixed URL for production if window.location.origin is not available or correct
+          // In production, this should be the deployed URL.
+          // However, using window.location.origin is generally correct for client-side navigation.
+          // If it redirects to localhost, it means window.location.origin was localhost when the code ran,
+          // OR Supabase is configured to redirect to localhost.
+          // For now, let's trust the current window origin, which works for both dev and prod IF accessed via the correct URL.
           redirectTo: `${window.location.origin}/`,
         },
       })
