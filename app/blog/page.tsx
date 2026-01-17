@@ -1,4 +1,4 @@
-import { getArticles } from '@/lib/articles'
+import { getAllArticles } from '@/lib/articles'
 import Link from 'next/link'
 import { Metadata } from 'next'
 import { ArrowLeft, Calendar, Tag } from 'lucide-react'
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 }
 
 export default function BlogPage() {
-  const articles = getArticles()
+  const articles = getAllArticles()
 
   return (
     <div className="min-h-screen bg-[#070612] text-white py-20 px-6 lg:px-12 font-serif">

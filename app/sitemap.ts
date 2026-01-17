@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next'
 import { createClient } from '@/lib/supabase/client'
-import { getArticles } from '@/lib/articles'
+import { getAllArticles } from '@/lib/articles'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://entrelab.vercel.app'
@@ -13,7 +13,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .order('created_at', { ascending: false })
 
   // Fetch all articles
-  const articles = getArticles()
+  const articles = getAllArticles()
 
   const articleUrls = articles.map((article) => ({
     url: `${baseUrl}/blog/${article.slug}`,

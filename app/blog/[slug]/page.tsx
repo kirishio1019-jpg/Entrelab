@@ -1,4 +1,4 @@
-import { getArticleBySlug, getArticles } from '@/lib/articles'
+import { getArticleBySlug, getAllArticles } from '@/lib/articles'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Calendar, Tag } from 'lucide-react'
@@ -14,7 +14,7 @@ type Props = {
 
 // Generate static params for all articles
 export async function generateStaticParams() {
-  const articles = getArticles()
+  const articles = getAllArticles()
   return articles.map((article) => ({
     slug: article.slug,
   }))
