@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react'
 import HeroSection from './components/HeroSection'
 import FeedSection from './components/FeedSection'
 import PostIdeaModal from './components/PostIdeaModal'
+import InAppBrowserGuide from './components/InAppBrowserGuide'
 import { createClient } from '@/lib/supabase/client'
 
 export default function Home() {
@@ -50,6 +51,7 @@ export default function Home() {
 
   return (
     <main className="w-full bg-black text-[#F5F5F7] overflow-x-hidden font-serif">
+      <InAppBrowserGuide />
       <PostIdeaModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       
       <HeroSection 
