@@ -24,6 +24,7 @@ interface Idea {
   looking_for: string[]
   created_at: string
   user_id: string
+  author_name?: string
   likes: { count: number }[]
   comments: { count: number }[]
   user_has_liked: boolean
@@ -197,11 +198,11 @@ export default function FeedSection({ onPostClick }: FeedSectionProps) {
               {/* Card Header */}
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-sm font-bold">
-                    U
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-sm font-bold text-white">
+                    {idea.author_name ? idea.author_name[0] : 'U'}
                   </div>
                   <div>
-                    <h4 className="font-medium text-sm">User</h4>
+                    <h4 className="font-medium text-sm">{idea.author_name || 'Anonymous User'}</h4>
                     <span className="text-xs text-white/50">{formatDate(idea.created_at)}</span>
                   </div>
                 </div>

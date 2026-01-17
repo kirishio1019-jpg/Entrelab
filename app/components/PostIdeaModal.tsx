@@ -17,7 +17,8 @@ export default function PostIdeaModal({ isOpen, onClose, onPostSuccess }: PostId
     title: '',
     description: '',
     lookingFor: '',
-    tags: ''
+    tags: '',
+    authorName: ''
   })
 
   const supabase = createClient()
@@ -44,13 +45,14 @@ export default function PostIdeaModal({ isOpen, onClose, onPostSuccess }: PostId
           title: formData.title,
           description: formData.description,
           looking_for: lookingForArray,
-          tags: tagsArray
+          tags: tagsArray,
+          author_name: formData.authorName
         })
 
       if (error) throw error
 
       // Reset form and close
-      setFormData({ title: '', description: '', lookingFor: '', tags: '' })
+      setFormData({ title: '', description: '', lookingFor: '', tags: '', authorName: '' })
       if (onPostSuccess) onPostSuccess()
       onClose()
     } catch (error) {
@@ -94,6 +96,20 @@ export default function PostIdeaModal({ isOpen, onClose, onPostSuccess }: PostId
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-white/70 mb-1">
+                  お名前（表示名）
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={formData.authorName}
+                  onChange={(e) => setFormData({...formData, authorName: e.target.value})}
+                  placeholder="例: 山田 太郎"
+                  className="w-full rounded-lg bg-white/5 border border-white/10 px-4 py-3 text-white placeholder:text-white/30 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                />
+              </div>
+
               <div>
                 <label className="block text-sm font-medium text-white/70 mb-1">
                   タイトル
