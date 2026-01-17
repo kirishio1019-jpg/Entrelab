@@ -2,12 +2,13 @@
 
 import React, { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, Send, User } from 'lucide-react'
+import { X, Send, User, Trash2 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
 interface IdeaDetailModalProps {
   isOpen: boolean
   onClose: () => void
+  onDelete?: () => void
   idea: any
 }
 
@@ -18,11 +19,37 @@ interface Comment {
   user_id: string
 }
 
-export default function IdeaDetailModal({ isOpen, onClose, idea }: IdeaDetailModalProps) {
+export default function IdeaDetailModal({ isOpen, onClose, onDelete, idea }: IdeaDetailModalProps) {
   const [comments, setComments] = useState<Comment[]>([])
   const [newComment, setNewComment] = useState('')
   const [loading, setLoading] = useState(false)
+  const [currentUser, setCurrentUser] = useState<any>(null)
   const supabase = createClient()
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setCurrentUser(user)
+    })
+  }, [supabase])
+
+  const handleDelete = async () => {
+    if (!confirm('本当に削除しますか？')) return
+    
+    try {
+      const { error } = await supabase
+        .from('ideas')
+        .delete()
+        .eq('id', idea.id)
+      
+      if (error) throw error
+      
+      if (onDelete) onDelete()
+      onClose()
+    } catch (error) {
+      console.error('Error deleting idea:', error)
+      alert('削除に失敗しました')
+    }
+  }
 
   const fetchComments = useCallback(async () => {
     if (!idea) return
@@ -103,10 +130,21 @@ export default function IdeaDetailModal({ isOpen, onClose, idea }: IdeaDetailMod
           >
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-white/10">
-              <h2 className="text-2xl font-semibold truncate pr-4">{idea.title}</h2>
-              <button onClick={onClose} className="rounded-full p-2 hover:bg-white/10 transition-colors">
-                <X className="h-5 w-5" />
-              </button>
+              <h2 className="text-2xl font-semibold truncate pr-4 flex-1">{idea.title}</h2>
+              <div className="flex items-center gap-2">
+                {currentUser && currentUser.id === idea.user_id && (
+                  <button
+                    onClick={handleDelete}
+                    className="rounded-full p-2 hover:bg-red-500/20 text-red-400 transition-colors"
+                    title="削除する"
+                  >
+                    <Trash2 className="h-5 w-5" />
+                  </button>
+                )}
+                <button onClick={onClose} className="rounded-full p-2 hover:bg-white/10 transition-colors">
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
             </div>
 
             {/* Content (Scrollable) */}

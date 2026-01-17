@@ -147,6 +147,10 @@ export default function FeedSection({ onPostClick }: FeedSectionProps) {
         <IdeaDetailModal 
           isOpen={!!selectedIdea} 
           onClose={() => setSelectedIdea(null)} 
+          onDelete={() => {
+            setSelectedIdea(null)
+            fetchIdeas()
+          }}
           idea={selectedIdea} 
         />
         
