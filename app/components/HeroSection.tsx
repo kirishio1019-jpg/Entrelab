@@ -134,7 +134,7 @@ export default function HeroSection({ user, onPostClick, onLogout }: HeroSection
           />
         </div>
         {/* Mobile Overlay to darken video slightly for text readability if needed */}
-        <div className="absolute inset-0 bg-black/40 lg:bg-transparent" />
+        <div className="absolute inset-0 bg-black/20 lg:bg-transparent" />
       </div>
 
       {/* Bottom Fade Gradient */}
