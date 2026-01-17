@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     telephone: false,
   },
   verification: {
-    google: "google-site-verification-code-here", // Replace with actual code from Search Console later
+    google: "google205b429e3d2e6b0b",
   },
   openGraph: {
     title: "起業アイデアを気軽に投げて磨ける | Entrelab",
