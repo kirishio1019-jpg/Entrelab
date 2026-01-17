@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import { MessageSquare, ThumbsUp, UserPlus, Send, Sparkles, ArrowRight } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import IdeaDetailModal from './IdeaDetailModal'
+import Link from 'next/link'
 
 // Keep mock data for fallback or initial state if needed, or remove it entirely.
 // For now, let's keep it but prioritize fetched data.
@@ -211,8 +212,8 @@ export default function FeedSection({ onPostClick }: FeedSectionProps) {
                 </button>
               </div>
 
-              {/* Card Content */}
-              <div className="flex-1">
+              {/* Card Content (Wrapped in Link for SEO) */}
+              <Link href={`/ideas/${idea.id}`} className="flex-1 block group-hover:opacity-100">
                 <h3 className="text-xl font-semibold mb-3 group-hover:text-blue-300 transition-colors">
                   {idea.title}
                 </h3>
@@ -228,7 +229,7 @@ export default function FeedSection({ onPostClick }: FeedSectionProps) {
                     </span>
                   ))}
                 </div>
-              </div>
+              </Link>
 
               {/* Looking For */}
               {idea.looking_for && idea.looking_for.length > 0 && (
@@ -264,12 +265,12 @@ export default function FeedSection({ onPostClick }: FeedSectionProps) {
                     <span>{idea.comments?.[0]?.count || 0}</span>
                   </button>
                 </div>
-                <button 
-                  onClick={() => setSelectedIdea(idea)}
+                <Link 
+                  href={`/ideas/${idea.id}`}
                   className="text-xs font-medium hover:text-white transition-colors flex items-center gap-1"
                 >
                   詳細を見る <ArrowRight className="w-3 h-3" />
-                </button>
+                </Link>
               </div>
             </motion.div>
           ))}
