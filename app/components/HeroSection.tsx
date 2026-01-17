@@ -125,11 +125,16 @@ export default function HeroSection({ user, onPostClick, onLogout }: HeroSection
       )}
 
       {/* Background Video */}
-      <div className="absolute inset-0 z-0 ml-[200px] h-full origin-left scale-[1.2]">
-        <VideoBackground
-          src={VIDEO_URL}
-          className="h-full w-full object-cover"
-        />
+      <div className="absolute inset-0 z-0 h-full w-full">
+        {/* Mobile: Centered/Cover, Desktop: Shifted right */}
+        <div className="absolute inset-0 h-full w-full lg:ml-[200px] lg:origin-left lg:scale-[1.2]">
+          <VideoBackground
+            src={VIDEO_URL}
+            className="h-full w-full object-cover"
+          />
+        </div>
+        {/* Mobile Overlay to darken video slightly for text readability if needed */}
+        <div className="absolute inset-0 bg-black/40 lg:bg-transparent" />
       </div>
 
       {/* Bottom Fade Gradient */}
@@ -137,7 +142,7 @@ export default function HeroSection({ user, onPostClick, onLogout }: HeroSection
 
       {/* Content Container */}
       <div className="relative z-20 flex h-full items-center">
-        <div className="max-w-7xl px-6 lg:px-12 w-full">
+        <div className="max-w-7xl px-6 lg:px-12 w-full pt-20 lg:pt-0"> {/* Added padding top for mobile */}
           <div className="flex flex-col items-start gap-12">
             
             {/* Top Content Group */}
