@@ -4,6 +4,7 @@ import React from 'react'
 import { motion, Variants } from 'framer-motion'
 import { ArrowRight, Sparkles, LogOut, User } from 'lucide-react'
 import VideoBackground from './VideoBackground'
+import Link from 'next/link'
 
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
